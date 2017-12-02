@@ -8,15 +8,18 @@ import java.util.List;
  * @author zhu
  *
  */
-public class Restaurant extends BaseEntity<String> {
+public class Restaurant extends Entity<Long> {
 
 	private List<Table> tables = new ArrayList<>();
 
-	public Restaurant(String id, String name, List<Table> tables) {
+	public Restaurant(Long id, String name, List<Table> tables) {
 		super(id, name);
 		this.tables = tables;
 	}
-
+	public Restaurant(String name, List<Table> tables) {
+		super(name);
+		this.tables = tables;
+	}
 	public List<Table> getTables() {
 		return tables;
 	}

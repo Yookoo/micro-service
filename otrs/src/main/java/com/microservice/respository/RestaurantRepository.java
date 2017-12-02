@@ -10,9 +10,11 @@ import java.util.Collection;
  * @param <String>
  */
 
-public interface RestaurantRepository<Restaurant, String> extends Repository<Restaurant, String> {
+public interface RestaurantRepository<Restaurant, Long> extends Repository<Restaurant, Long> {
 
 	boolean containsName(String name) throws Exception;
 	
 	Collection<Restaurant> findByName (String name) throws Exception;
+	
+	Collection<Restaurant> findByNameLike (String name) throws Exception;
  }

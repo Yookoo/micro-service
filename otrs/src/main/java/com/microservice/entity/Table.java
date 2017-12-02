@@ -1,16 +1,15 @@
 package com.microservice.entity;
 
-import java.math.BigInteger;
 /**
  * Table 实体
  * @author zhu
  *
  */
-public class Table extends BaseEntity<BigInteger> {
+public class Table extends Entity<Long> {
 
 	private int capacity;//容量
 
-	public Table(BigInteger id, String name, int capacity) {
+	public Table(Long id, String name, int capacity) {
 		super(id, name);
 		this.capacity = capacity;
 	}
