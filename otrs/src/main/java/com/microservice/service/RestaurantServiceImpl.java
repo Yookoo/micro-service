@@ -48,8 +48,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 	@Override
-	public Entity<Long> findById(Long id) throws Exception {
-		return restaurantRepository.get(id);
+	public Restaurant findById(Long id) throws Exception {
+		return (Restaurant) restaurantRepository.get(id);
 	}
 
 	@Override
@@ -66,6 +66,11 @@ public class RestaurantServiceImpl implements RestaurantService {
 	@Override
 	public Collection<Restaurant> findAll() {
 		return restaurantRepository.getAll();
+	}
+
+	@Override
+	public Collection<Restaurant> findByNameLike(String name) throws Exception {
+		return restaurantRepository.findByNameLike(name);
 	}
 
 }

@@ -12,9 +12,10 @@ public interface RestaurantService {
 	void add(Restaurant restaurant) throws Exception;
 	void update(Restaurant restaurant) throws Exception;
 
-	Entity<Long> findById(Long id) throws Exception;
+	Restaurant findById(Long id) throws Exception;
 	Collection<Restaurant> findByName(String name) throws Exception;
 	void findByCriteria(Map<String,ArrayList<String>> name) throws Exception;
-	Collection<Restaurant> findAll();
+	Collection<Restaurant> findAll()throws Exception;
 	void delete(Long id) throws Exception;
+	Collection<Restaurant> findByNameLike(String name) throws Exception;
 }
