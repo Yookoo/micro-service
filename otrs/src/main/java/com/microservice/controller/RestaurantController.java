@@ -2,12 +2,12 @@ package com.microservice.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.websocket.server.PathParam;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.microservice.entity.Entity;
 import com.microservice.entity.Restaurant;
 import com.microservice.service.RestaurantService;
 import com.microservice.vo.ResponseStatus;
@@ -33,7 +31,7 @@ import com.microservice.vo.ResponseVO;
 @RequestMapping("/v1/restaurants")
 public class RestaurantController {
 
-	protected Logger logger = Logger.getLogger(RestaurantController.class.getName());
+	protected Logger logger = LoggerFactory.getLogger(RestaurantController.class.getName());
 
 	protected RestaurantService restaurantService;
 
@@ -51,7 +49,7 @@ public class RestaurantController {
 	@GetMapping
 	public ResponseEntity<ResponseVO<Restaurant>> findByName(@PathParam("name") String name) {
 
-		logger.info(String.format("restaurantService findByName invoked:{} for {}",
+		logger.info(String.format("restaurantService findByName invoked: {} for {}",
 				restaurantService.getClass().getName(), name));
 		System.out.println(name);
 		Collection<Restaurant> restaurants = null;
@@ -60,7 +58,7 @@ public class RestaurantController {
 			try {
 				restaurants = restaurantService.findAll();
 			} catch (Exception e) {
-				logger.log(Level.WARN, "Exception raised findAll Rest Call", e);
+				logger.warn("Exception raised findAll Rest Call", e);
 				e.printStackTrace();
 				return new ResponseEntity<ResponseVO<Restaurant>>(HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -76,7 +74,7 @@ public class RestaurantController {
 		try {
 			restaurants = restaurantService.findByNameLike(name);
 		} catch (Exception e) {
-			logger.log(Level.WARN, "Exception raised findByNameLike Rest Call", e);
+			logger.warn("Exception raised findByNameLike Rest Call", e);
 			e.printStackTrace();
 			return new ResponseEntity<ResponseVO<Restaurant>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -96,7 +94,7 @@ public class RestaurantController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ResponseVO<Restaurant>> findById(@PathVariable("id") Long id) {
 
-		logger.info(String.format("restaurantService findById invoked:{} for {}",
+		logger.info(String.format("restaurantService findById invoked: {} for {}",
 				restaurantService.getClass().getName(), id));
 		Restaurant restaurant = null;
 		Collection<Restaurant> restaurants = new ArrayList<>();
@@ -104,7 +102,7 @@ public class RestaurantController {
 			restaurant = restaurantService.findById(id);
 			restaurants.add(restaurant);
 		} catch (Exception e) {
-			logger.log(Level.WARN, "Exception raised findById Rest Call", e);
+			logger.warn("Exception raised findById Rest Call", e);
 			e.printStackTrace();
 			return new ResponseEntity<ResponseVO<Restaurant>>(HttpStatus.INTERNAL_SERVER_ERROR);	
 		}
@@ -127,7 +125,7 @@ public class RestaurantController {
 		try {
 			restaurantService.add(restaurant);
 		} catch (Exception e) {
-			logger.log(Level.WARN, "Exception raised add Rest Call", e);
+			logger.warn("Exception raised add Rest Call", e);
 			e.printStackTrace();
 			return new ResponseEntity<Restaurant>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
@@ -143,12 +141,12 @@ public class RestaurantController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ResponseVO<Restaurant>> deleteById(@PathVariable("id") Long id) {
 
-		logger.info(String.format("restaurantService deleteById invoked:{} for {}",
+		logger.info(String.format("restaurantService deleteById invoked: {} for {}",
 				restaurantService.getClass().getName(), id));
 		try {
 			restaurantService.delete(id);
 		} catch (Exception e) {
-			logger.log(Level.WARN, "Exception raised deleteById Rest Call", e);
+			logger.warn("Exception raised deleteById Rest Call", e);
 			e.printStackTrace();
 			return new ResponseEntity<ResponseVO<Restaurant>>(HttpStatus.INTERNAL_SERVER_ERROR);	
 		}
