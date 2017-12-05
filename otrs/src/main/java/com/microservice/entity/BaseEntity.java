@@ -4,7 +4,6 @@ public abstract class BaseEntity<T> extends Entity<T> {
 	
 	private T id;
 	private String name;
-	private boolean isModified;
 	
 	public T getId() {
 		return id;
@@ -19,14 +18,7 @@ public abstract class BaseEntity<T> extends Entity<T> {
 		this.name = name;
 	}
 	public BaseEntity(T id, String name) {
-		super.id = id;
-		super.name = name;
+		this.id = id;
+		this.name = name;
 	}
-	public boolean isModified() {
-		return isModified;
-	}
-	public void setModified(boolean isModified) {
-		this.isModified = isModified;
-	}
-	
 }
