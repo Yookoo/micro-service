@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import com.edu.entity.Action;
 import com.edu.entity.ActionType;
 import com.edu.entity.ChangeItem;
+import com.edu.repository.ActionRepository;
 import com.edu.repository.ProductRepository;
 import com.edu.utils.DiffUtils;
 
@@ -49,27 +50,26 @@ public class DatalogAspect {
 	private static final Logger logger = LoggerFactory.getLogger(DatalogAspect.class);
 	
 	@Autowired
-	private ProductRepository productRepository;
+	private ActionRepository actionRepository;
 	
-	@Pointcut("excution(public * com.edu.repository.*.save*(..))")
+	@Pointcut("execution(public * com.edu.repository.*.save*(..))")
 	public void save() {}
 	
-	@Pointcut("excution(public * com.edu.repository.*.delete*(..))")
+	@Pointcut("execution(public * com.edu.repository.*.delete*(..))")
 	public void delete() {}
 	
 	@Around("save()||delete()")
 	public Object addOperateLog(ProceedingJoinPoint pjp) throws Throwable{
 		System.out.println("--------enter aspect----------");
-		Object service = pjp.getTarget();
-		Class<? extends Object> cls = service.getClass();
+		Object target = pjp.getTarget();
+		Class<? extends Object> cls = target.getClass();
 		
 		String methodName = pjp.getSignature().getName();
+		Object args = pjp.getArgs()[0];	
 
-		Object args = pjp.getArgs()[0];
-		
-		Action action = new Action();
-		
+		Action action = new Action();	
 		ActionType actionType = null;
+
 		Object id = null;
 		Object result = null;
 		Object oldObj = null;
@@ -92,7 +92,7 @@ public class DatalogAspect {
 					//修改
 					actionType = actionType.UPDATE;
 					//获取老对象
-					oldObj = DiffUtils.getObjectById(service, id);
+					oldObj = DiffUtils.getObjectById(target, id);
 					List<ChangeItem> changeItems = DiffUtils.getChangeItems(oldObj, newObj);
 					action.getChanges().addAll(changeItems);
 					
@@ -102,7 +102,7 @@ public class DatalogAspect {
 				id = args;
 				//删除
 				actionType = actionType.DELETE;
-				oldObj = DiffUtils.getObjectById(service, id);
+				oldObj = DiffUtils.getObjectById(target, id);
 				List<ChangeItem> changeItems = DiffUtils.getDeleteChangeItems(oldObj);
 				action.getChanges().addAll(changeItems);
 			}
@@ -115,11 +115,18 @@ public class DatalogAspect {
 			action.setOperator("user");
 			action.setActionType(actionType);
 			System.out.println("-------proceed------------");
+			result = pjp.proceed();
 			
-			Object returnObj = pjp.proceed();
-			
-			
-			
+			//TODO AFTER OPERATION save action
+            action.setActionType(actionType);
+            if(ActionType.INSERT == actionType){
+                //new id
+                Object newId = PropertyUtils.getProperty(result,"id");
+                action.setObjId(newId);
+
+            }
+            action.setOperator("admin"); //dynamic get from threadlocal/session
+            actionRepository.save(action);
 			
 		} catch (Throwable e) {
 			System.out.println("ex:"+ e.getMessage());

@@ -3,7 +3,7 @@ package com.edu.entity;
 public class ChangeItem {
 
 	private String field;
-	private String fieldName;
+	private String fieldShowName;
 	private String oldValue;
 	private String newValue;
 	
@@ -14,11 +14,11 @@ public class ChangeItem {
 	public void setField(String field) {
 		this.field = field;
 	}
-	public String getFieldName() {
-		return fieldName;
+	public String getFieldShowName() {
+		return fieldShowName;
 	}
-	public void setFieldName(String fieldName) {
-		this.fieldName = fieldName;
+	public void setFieldShowName(String fieldShowName) {
+		this.fieldShowName = fieldShowName;
 	}
 	public String getOldValue() {
 		return oldValue;
@@ -32,6 +32,11 @@ public class ChangeItem {
 	public void setNewValue(String newValue) {
 		this.newValue = newValue;
 	}
+	@Override
+	public String toString() {
+		return "ChangeItem [field=" + field + ", fieldShowName=" + fieldShowName + ", oldValue=" + oldValue
+				+ ", newValue=" + newValue + "]";
+	}
 	
-	
+	 
 }

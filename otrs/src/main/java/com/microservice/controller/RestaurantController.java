@@ -7,7 +7,7 @@ import javax.websocket.server.PathParam;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.event.Level;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.microservice.entity.Restaurant;
 import com.microservice.service.RestaurantService;
 import com.microservice.vo.ResponseStatus;
@@ -33,6 +34,7 @@ public class RestaurantController {
 
 	protected Logger logger = LoggerFactory.getLogger(RestaurantController.class.getName());
 
+	@Autowired
 	protected RestaurantService restaurantService;
 
 	public RestaurantController(RestaurantService restaurantService) {
@@ -49,14 +51,15 @@ public class RestaurantController {
 	@GetMapping
 	public ResponseEntity<ResponseVO<Restaurant>> findByName(@PathParam("name") String name) {
 
-		logger.info(String.format("restaurantService findByName invoked: {} for {}",
-				restaurantService.getClass().getName(), name));
+		logger.info("restaurantService findByName invoked: {} for {}", restaurantService.getClass().getName(), name);
 		System.out.println(name);
 		Collection<Restaurant> restaurants = null;
 
 		if (name == null || "".equals(name)) {
 			try {
-				restaurants = restaurantService.findAll();
+//				restaurants = restaurantService.findAll();
+				restaurants = new ArrayList<>();
+				restaurants.add(new Restaurant("李白", null));
 			} catch (Exception e) {
 				logger.warn("Exception raised findAll Rest Call", e);
 				e.printStackTrace();
@@ -94,8 +97,7 @@ public class RestaurantController {
 	@GetMapping("/{id}")
 	public ResponseEntity<ResponseVO<Restaurant>> findById(@PathVariable("id") Long id) {
 
-		logger.info(String.format("restaurantService findById invoked: {} for {}",
-				restaurantService.getClass().getName(), id));
+		logger.info("restaurantService findById invoked: {} for {}", restaurantService.getClass().getName(), id);
 		Restaurant restaurant = null;
 		Collection<Restaurant> restaurants = new ArrayList<>();
 		try {
@@ -104,9 +106,11 @@ public class RestaurantController {
 		} catch (Exception e) {
 			logger.warn("Exception raised findById Rest Call", e);
 			e.printStackTrace();
-			return new ResponseEntity<ResponseVO<Restaurant>>(HttpStatus.INTERNAL_SERVER_ERROR);	
+			return new ResponseEntity<ResponseVO<Restaurant>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return restaurant != null ? new ResponseEntity<ResponseVO<Restaurant>>(new ResponseVO<>(ResponseStatus.SUCCESS, restaurants), HttpStatus.OK)
+		return restaurant != null
+				? new ResponseEntity<ResponseVO<Restaurant>>(new ResponseVO<>(ResponseStatus.SUCCESS, restaurants),
+						HttpStatus.OK)
 				: new ResponseEntity<ResponseVO<Restaurant>>(HttpStatus.NO_CONTENT);
 
 	}
@@ -115,13 +119,12 @@ public class RestaurantController {
 	 * 添加一个餐馆 比如：<code>http://.../v1/restaurants</code>
 	 * 
 	 * @param restaurant
-	 * @return 
+	 * @return
 	 */
 	@PostMapping
 	public ResponseEntity<Restaurant> add(@RequestBody Restaurant restaurant) {
 
-		logger.info(String.format("restaurantService add invoked:{} for {}", restaurantService.getClass().getName(),
-				restaurant));
+		logger.info("restaurantService add invoked:{} for {}", restaurantService.getClass().getName(), restaurant);
 		try {
 			restaurantService.add(restaurant);
 		} catch (Exception e) {
@@ -131,7 +134,7 @@ public class RestaurantController {
 		}
 		return new ResponseEntity<Restaurant>(HttpStatus.CREATED);
 	}
-	
+
 	/**
 	 * 删除具有指定ID的餐馆 比如：<code>http://.../v1/restaurants/1</code> 将返回ID为'1'的餐馆；
 	 * 
@@ -141,14 +144,13 @@ public class RestaurantController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ResponseVO<Restaurant>> deleteById(@PathVariable("id") Long id) {
 
-		logger.info(String.format("restaurantService deleteById invoked: {} for {}",
-				restaurantService.getClass().getName(), id));
+		logger.info("restaurantService deleteById invoked: {} for {}", restaurantService.getClass().getName(), id);
 		try {
 			restaurantService.delete(id);
 		} catch (Exception e) {
 			logger.warn("Exception raised deleteById Rest Call", e);
 			e.printStackTrace();
-			return new ResponseEntity<ResponseVO<Restaurant>>(HttpStatus.INTERNAL_SERVER_ERROR);	
+			return new ResponseEntity<ResponseVO<Restaurant>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<ResponseVO<Restaurant>>(new ResponseVO<>(ResponseStatus.SUCCESS), HttpStatus.OK);
 

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import com.edu.anno.Datalog;
 @Entity
 public class Product {
@@ -21,8 +23,9 @@ public class Product {
 	private BigDecimal buyPrice;
 	private BigDecimal sellPrice;
 	private String provider;//厂家
-	
+	@CreatedDate
 	private Date onlineTime;
+	@CreatedDate
 	private Date updateTime;
 	public Long getId() {
 		return id;
