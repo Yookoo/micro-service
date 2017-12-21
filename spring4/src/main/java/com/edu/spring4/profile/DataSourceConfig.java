@@ -1,18 +1,10 @@
 package com.edu.spring4.profile;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.jndi.JndiObjectFactoryBean;
 
 @Configuration
 public class DataSourceConfig {
-
+	/**
 	@Bean(destroyMethod="shutdown")
 	@Profile("dev")
 	DataSource embeddedDataSource() {
@@ -44,5 +36,5 @@ public class DataSourceConfig {
 		dataSource.setInitialSize(20);
 		return dataSource;
 	}
-	
+	*/
 }
