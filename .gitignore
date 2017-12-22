@@ -1,3 +1,6 @@
 *.class
 **/.settings/
 **/bin/
+/.metadata/
+/.metadata/
+/.recommenders/

@@ -15,8 +15,10 @@
     </parent>
     <modules>
         <module>ms-provider-user</module>
+        <module>ms-provider-user-2</module>
         <module>ms-consumer-movie</module>
 		<module>ms-eureka-server</module>
+		<module>ms-consumer-movie-feign</module>
     </modules>
     <dependencyManagement>
         <dependencies>
