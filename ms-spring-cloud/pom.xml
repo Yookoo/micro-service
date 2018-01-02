@@ -18,7 +18,9 @@
         <module>ms-provider-user-2</module>
         <module>ms-consumer-movie</module>
 		<module>ms-eureka-server</module>
+		<module>ms-gateway-zuul</module>
 		<module>ms-consumer-movie-feign</module>
+		<module>ms-consumer-movie-hystrix</module>
     </modules>
     <dependencyManagement>
         <dependencies>
